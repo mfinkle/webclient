@@ -2,38 +2,110 @@
 
 <html>
 <head>
-  <title>webclient</title>
+  <title>TinCan</title>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+  <script type="text/javascript" src="http://borismoore.github.com/jsrender/jsrender.js"></script>
 
   <link rel="stylesheet" type="text/css" href="/modfiles/webclient/style.css">
-  <script type="text/javascript" src="/modfiles/webclient/jquery.min.js"></script>
   <script type="text/javascript" src="/modfiles/webclient/events.js"></script>
   <script type="text/javascript" src="/modfiles/webclient/irc.js"></script>
   <script type="text/javascript" src="/modfiles/webclient/view.js"></script>
   <script type="text/javascript">
-    var csrftoken = "<?VAR _CSRF_Check ?>";
-    var networks = {
+  var csrftoken = "<?VAR _CSRF_Check ?>";
+  var networks = {
     <?LOOP NetworkLoop ?>
     "<? VAR Network ?>": new IRCNetwork("<? VAR Network ?>", "<? VAR Nick?>", [
-    <?LOOP ChannelLoop ?>
-    new Channel("<? VAR Channel ?>", "<? VAR Topic ?>", "<? VAR Nicks?>"),
-    <?ENDLOOP?>
+      <?LOOP ChannelLoop ?>
+      new Channel("<? VAR Channel ?>", "<? VAR Topic ?>", "<? VAR Nicks?>"),
+      <?ENDLOOP?>
     ]),
     <?ENDLOOP?>
-    };
-    for (n in networks) {
-    activenetwork = networks[n];
+  };
+  for (n in networks) {
+    activeNetwork = networks[n];
     break;
-    }
+  }
+  </script>
+
+  <script type="text/javascript">
+    $.templates({
+      channelpage:
+      '<div data-role="page" id="{{:pageid}}" data-theme="d" class="channel-page">' +
+        '<div data-role="header" data-position="fixed">' +
+          '<h1>{{:title}}</h1>' +
+          '<a href="#post" data-role="button" data-icon="check" data-rel="dialog" class="ui-btn-right">Post</a>' +
+        '</div>' +
+
+        '<div data-role="content" id="{{:pageid}}-content">' +
+          '<ul class="chat">' +
+          '</ul>' +
+        '</div>' +
+      '</div>',
+      channelrow:
+        '<li id="channel-{{:pageid}}"><a href="#{{:pageid}}">{{:title}}</a><span class="ui-li-count">{{:count}}</span></li>'
+    });
   </script>
 </head>
 
 <body>
-  <div id="tabs"></div>
+  <div data-role="page" id="home" data-theme="d">
+    <div data-role="header" data-position="fixed">
+      <a href="#options" data-role="button" data-icon="gear">Options</a>
+      <h1>TinCan</h1>
+    </div><!-- /header -->
+    
+    <div data-role="content">
+    
+      <ul id="channels" data-role="listview" data-inset="true" data-theme="d" data-dividertheme="d">
+        <li data-role="list-divider">Channels</li>
+      </ul>
+      
+    </div><!-- /content -->
+  </div><!-- /page -->
 
-  <form>
-    <input type="text" id="chatinput">
-  </form>
+  <div data-role="page" id="options" data-theme="d">
+    <div data-role="header">
+      <h1>Options</h1>
+    </div><!-- /header -->
+    
+    <div data-role="content">
+      <div data-role="fieldcontain">
+        <fieldset data-role="controlgroup">
+          <legend>Message Order:</legend>
+          <input type="radio" name="message-order" id="radio-prepend" value="p" checked="true" class="persistent"/>
+          <label for="radio-prepend">Add to top of list</label>
+
+          <input type="radio" name="message-order" id="radio-append" value="a" class="persistent"/>
+          <label for="radio-append">Add to bottom of list</label>
+        </fieldset>
+      </div>
+      <div data-role="fieldcontain">
+        <label for="highlight">Highlight:</label>
+        <select name="highlight" id="highlight" data-role="slider" class="persistent">
+          <option value="off">Off</option>
+          <option value="on">On</option>
+        </select>
+      </div>
+      <div data-role="fieldcontain">
+        <label for="highlight-words">Highlight Words:</label>
+        <textarea name="highlight-words" id="highlight-words" class="persistent"></textarea>
+      </div>
+    </div><!-- /content -->
+  </div><!-- /page -->
+
+  <div data-role="dialog" id="post" data-theme="d">
+    <div data-role="header">
+      <h1>Post</h1>
+    </div><!-- /header -->
+    
+    <div data-role="content">
+      <textarea id="postinput"></textarea>
+    </div><!-- /content -->
+  </div><!-- /page -->
 </body>
 </html>

@@ -1,10 +1,10 @@
-var activenetwork = null;
+var activeNetwork = null;
 
 function OnCommand(cmd, text) {
   console.log("OnCommand(" + cmd + ", " + text + ")");
   switch (cmd) {
   case "me":
-    activenetwork.OnSendMessage(text, true);
+    activeNetwork.OnSendMessage(text, true);
     break;
   }
 }
@@ -182,11 +182,8 @@ Channel.prototype = {
   },
 
   SendMessage: function(network, text, action) {
-    var url = "chanmsg/" + encodeURIComponent(network.name)
-      + "/" + encodeURIComponent(this.name);
+    var url = "chanmsg/" + encodeURIComponent(network.name) + "/" + encodeURIComponent(this.name);
     console.log(url);
-    $.post(url, {msg: text,
-                 action: action ? "true" : "",
-                 "_CSRF_Check": csrftoken});
+    $.post(url, { msg: text, action: action ? "true" : "", "_CSRF_Check": csrftoken});
   }
 };
