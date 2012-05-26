@@ -1,0 +1,3 @@
+webclient - Web access to a ZNC server
+
+Initially based on the webclient module found here: https://github.com/luser/znc
