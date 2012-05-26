@@ -1,3 +1,16 @@
 webclient - Web access to a ZNC server
 
-Initially based on the webclient module found here: https://github.com/luser/znc
+Initially based on the webclient module by Ted Mielczarek found here:
+https://github.com/luser/znc
+
+Ted adds a ZNC module (webclient) which allows a web app to communicate with ZNC 
+using server-side events. Some of the differences between this code and Ted's:
+* I wanted to work with the ZNC that installs on Ubuntu 12.04. Ted's code works
+  with ZNC trunk. I had to remove support for features not in the Ubuntu version.
+* Server-side events uses a request header ("Last-Event-ID"), but ZNC has no
+  support for getting access to request headers. Ted added support in his fork.
+  I wanted to work from a shipping version of ZNC, so I use a cookie instead of
+  a header.
+* I wanted to build a mobile webapp, not a desktop webapp. The web code is based
+  on jQuery Mobile.
+
